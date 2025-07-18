@@ -22,7 +22,7 @@ func main() {
 	providerUrl := os.Getenv("PROVIDER_URL")
 	logsProviderUrl := os.Getenv("LOGS_PROVIDER_URL")
 
-	start := time.Date(2025, 6, 15, 0, 0, 0, 0, time.UTC)
+	start := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 	end := time.Date(2025, 7, 18, 0, 0, 0, 0, time.UTC)
 	for day := start; day.Before(end); day = day.AddDate(0, 0, 1) {
 		err := DailyEtl(day, accessKeyID, secretAccessKey, providerUrl, logsProviderUrl)
