@@ -1,0 +1,4 @@
+*.exe
+*.ipynb
+deployment/
+.env
