@@ -39,7 +39,8 @@ func GetBlockReferences() map[int64]*big.Int {
 		time.Date(2025, 4, 1, 0, 0, 0, 0, time.FixedZone("UTC", 0)).Unix(): big.NewInt(22387076),
 		time.Date(2025, 5, 1, 0, 0, 0, 0, time.FixedZone("UTC", 0)).Unix(): big.NewInt(22607927),
 		time.Date(2025, 6, 1, 0, 0, 0, 0, time.FixedZone("UTC", 0)).Unix(): big.NewInt(22822463),
-		time.Date(2025, 7, 1, 0, 0, 0, 0, time.FixedZone("UTC", 0)).Unix(): big.NewInt(22948418), // To change, month not finished yet
+		time.Date(2025, 7, 1, 0, 0, 0, 0, time.FixedZone("UTC", 0)).Unix(): big.NewInt(23044302),
+		time.Date(2025, 8, 1, 0, 0, 0, 0, time.FixedZone("UTC", 0)).Unix(): big.NewInt(23137363), // To change, month not finished yet
 	}
 	return ref
 }
