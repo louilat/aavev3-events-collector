@@ -10,7 +10,7 @@ import (
 )
 
 func SaveRecords(endpoint string, accessKeyID string, secretAccessKey string, rec []types.Log, bucket, key string) error {
-	useSSL := false
+	useSSL := true
 	minioClient, err := minio.New(endpoint, accessKeyID, secretAccessKey, useSSL)
 	if err != nil {
 		return err

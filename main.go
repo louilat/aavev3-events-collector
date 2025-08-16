@@ -5,7 +5,7 @@ import (
 	"aavev3-raw-balances-collector/internal/datalab"
 	"aavev3-raw-balances-collector/internal/events"
 	"aavev3-raw-balances-collector/internal/pool"
-	"aavev3-raw-balances-collector/internal/utils"
+	"context"
 	"fmt"
 	"math/big"
 	"os"
@@ -22,13 +22,19 @@ func main() {
 	providerUrl := os.Getenv("PROVIDER_URL")
 	logsProviderUrl := os.Getenv("LOGS_PROVIDER_URL")
 
-	start := time.Date(2025, 7, 1, 0, 0, 0, 0, time.UTC)
-	end := time.Date(2025, 8, 14, 0, 0, 0, 0, time.UTC)
-	for day := start; day.Before(end); day = day.AddDate(0, 0, 1) {
-		err := DailyEtl(day, accessKeyID, secretAccessKey, providerUrl, logsProviderUrl)
-		if err != nil {
-			panic(err)
-		}
+	// start := time.Date(2025, 7, 1, 0, 0, 0, 0, time.UTC)
+	// end := time.Date(2025, 8, 14, 0, 0, 0, 0, time.UTC)
+	// for day := start; day.Before(end); day = day.AddDate(0, 0, 1) {
+	// 	err := DailyEtl(day, accessKeyID, secretAccessKey, providerUrl, logsProviderUrl)
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// }
+	ref := time.Now().UTC().AddDate(0, 0, -21)
+	snapshotDay := time.Date(ref.Year(), ref.Month(), ref.Day(), 0, 0, 0, 0, time.UTC)
+	err := DailyEtl(snapshotDay, accessKeyID, secretAccessKey, providerUrl, logsProviderUrl)
+	if err != nil {
+		panic(err)
 	}
 }
 
@@ -60,20 +66,21 @@ func DailyEtl(day time.Time, accessKeyID, secretAccessKey, providerUrl, logsProv
 	dayBeginTmstp := time.Date(day.Year(), day.Month(), day.Day(), 0, 0, 0, 0, time.UTC)
 	dayEndTmstp := dayBeginTmstp.AddDate(0, 0, 1)
 
-	references := utils.GetBlockReferences()
-	refBlockNumber := references[time.Date(day.Year(), day.Month(), 1, 0, 0, 0, 0, time.UTC).Unix()]
-	fmt.Println(refBlockNumber)
+	// references := utils.GetBlockReferences()
+	// refBlockNumber := references[time.Date(day.Year(), day.Month(), 1, 0, 0, 0, 0, time.UTC).Unix()]
+	// fmt.Println(refBlockNumber)
 
-	// refBlockNumber, err := client.BlockNumber(context.Background())
-	// if err != nil {
-	// 	panic(err)
-	// }
+	refBlockNumber, err := client.BlockNumber(context.Background())
+	if err != nil {
+		panic(err)
+	}
+	refBlock := big.NewInt(int64(refBlockNumber))
 
-	fromBlock, _, err := blockfinder.FindClosestBlocks(client, uint64(dayBeginTmstp.Unix()), refBlockNumber, 7000)
+	fromBlock, _, err := blockfinder.FindClosestBlocks(client, uint64(dayBeginTmstp.Unix()), refBlock, 7000)
 	if err != nil {
 		return err
 	}
-	_, toBlock, err := blockfinder.FindClosestBlocks(client, uint64(dayEndTmstp.Unix()), refBlockNumber, 7000)
+	_, toBlock, err := blockfinder.FindClosestBlocks(client, uint64(dayEndTmstp.Unix()), refBlock, 7000)
 	if err != nil {
 		return err
 	}
