@@ -7,6 +7,6 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build -v -o /usr/local/bin/main ./main.go
+RUN go build -v -o /usr/local/bin/main ./cmd/aave-events-collector/
 
-CMD ["main"]
+CMD ["aave-events-collector"]
