@@ -253,7 +253,7 @@ func hourlyEtl(inputs HourlyEtlInputs) error {
 	}
 	fmt.Printf(" Done!\n")
 
-	fmt.Printf("STEP 4 - Finding start block and end block of the day...")
+	fmt.Printf("STEP 4 - Finding start block and end block of the hour...")
 	hourBeginTmstp := time.Date(inputs.hour.Year(), inputs.hour.Month(), inputs.hour.Day(), inputs.hour.Hour(), 0, 0, 0, time.UTC)
 	hourEndTmstp := hourBeginTmstp.Add(time.Hour)
 
